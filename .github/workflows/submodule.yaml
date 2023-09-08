@@ -1,0 +1,23 @@
+name: Propagate submodule updates
+
+on:
+    push:
+        branches: [ main ]
+    workflow_dispatch:
+
+jobs:
+    dispatch_to_frontend:
+        name: Dispatch Updates to Frontend
+        runs-on: ubuntu-latest
+        steps:
+            - name: Dispatch through REST
+              run: |
+                  curl -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.DISPATCH_TOKEN }}" https://api.github.com/repos/CloudMavericks/Velocity.Frontend/dispatches --data '{"event_type": "update-submodules"}'
+    
+    dispatch_to_backend:
+        name: Dispatch Updates to Backend
+        runs-on: ubuntu-latest
+        steps:
+            - name: Dispatch through REST
+              run: |
+                  curl -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.DISPATCH_TOKEN }}" https://api.github.com/repos/CloudMavericks/Velocity.Backend/dispatches --data '{"event_type": "update-submodules"}'  
